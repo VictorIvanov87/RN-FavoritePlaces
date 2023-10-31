@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { View, Text, Button, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
 import { launchCameraAsync } from "expo-image-picker";
 import { Colors } from "../../constants/colors";
 import OutlinedButton from "../UI/OutlinedButton";
 
-const ImagePicker = () => {
+const ImagePicker = ({ onImageTaken }) => {
   const [image, setImage] = useState();
 
   const takeImageHandler = async () => {
     const imageData = await launchCameraAsync({ allowsEditing: true, aspect: [16, 9], quality: 0.5 });
     setImage(imageData.assets[0]);
+    onImageTaken(imageData.assets[0]);
   };
 
   return (

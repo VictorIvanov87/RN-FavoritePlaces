@@ -4,9 +4,9 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { getCurrentPositionAsync, useForegroundPermissions, PermissionStatus } from "expo-location";
 import OutlinedButton from "../UI/OutlinedButton";
 import { Colors } from "../../constants/colors";
-import { getMapPreview } from "../../util/location";
+import { getAddress, getMapPreview } from "../../util/location";
 
-const LocationPicker = () => {
+const LocationPicker = ({ onLocationPick }) => {
   const navigation = useNavigation();
   const { params } = useRoute();
   const mapPickedLocation = params
@@ -20,10 +20,16 @@ const LocationPicker = () => {
   const [userLocation, setUserLocation] = useState();
 
   useEffect(() => {
-    if (mapPickedLocation && !userLocation) {
-      setUserLocation(mapPickedLocation);
-    }
-  }, [mapPickedLocation, userLocation]);
+    const handleLocation = async () => {
+      if (mapPickedLocation && !userLocation) {
+        const address = await getAddress(mapPickedLocation.lat, mapPickedLocation.lng);
+        setUserLocation(mapPickedLocation);
+        onLocationPick({ ...mapPickedLocation, address });
+      }
+    };
+
+    handleLocation();
+  }, [mapPickedLocation, userLocation, onLocationPick]);
 
   const verifyPermissions = async () => {
     if (locationPermissionInformation.status === PermissionStatus.UNDETERMINED) {
@@ -48,8 +54,10 @@ const LocationPicker = () => {
       return;
     }
     const result = await getCurrentPositionAsync();
+    const address = await getAddress(result.coords.latitude, result.coords.longitude);
 
     setUserLocation({ lat: result.coords.latitude, lng: result.coords.longitude });
+    onLocationPick({ lat: result.coords.latitude, lng: result.coords.longitude, address });
   };
 
   const pickOnMapHandler = () => {
