@@ -12,7 +12,12 @@ const PlacesList = ({ places }) => {
   }
 
   return (
-    <FlatList data={places} keyExtractor={(item) => item.id} renderItem={({ item }) => <PlaceItem place={item} />} />
+    <FlatList
+      style={styles.list}
+      data={places}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => <PlaceItem place={item} />}
+    />
   );
 };
 
@@ -25,6 +30,9 @@ const styles = StyleSheet.create({
   fallbackText: {
     color: Colors.primary200,
     fontSize: 16
+  },
+  list: {
+    margin: 24
   }
 });
 
