@@ -27,6 +27,7 @@ const ImagePicker = () => {
 
 const styles = StyleSheet.create({
   image: {
+    borderRadius: 4,
     height: "100%",
     width: "100%"
   },
