@@ -1,13 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, StyleSheet, Alert, Image, Text } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { getCurrentPositionAsync, useForegroundPermissions, PermissionStatus } from "expo-location";
 import OutlinedButton from "../UI/OutlinedButton";
 import { Colors } from "../../constants/colors";
 import { getMapPreview } from "../../util/location";
 
 const LocationPicker = () => {
+  const navigation = useNavigation();
+  const { params } = useRoute();
+  const mapPickedLocation = params
+    ? {
+        lat: params.latitude,
+        lng: params.longitude
+      }
+    : null;
+
   const [locationPermissionInformation, requestPermission] = useForegroundPermissions();
   const [userLocation, setUserLocation] = useState();
+
+  useEffect(() => {
+    if (mapPickedLocation && !userLocation) {
+      setUserLocation(mapPickedLocation);
+    }
+  }, [mapPickedLocation, userLocation]);
 
   const verifyPermissions = async () => {
     if (locationPermissionInformation.status === PermissionStatus.UNDETERMINED) {
@@ -36,7 +52,11 @@ const LocationPicker = () => {
     setUserLocation({ lat: result.coords.latitude, lng: result.coords.longitude });
   };
 
-  const pickOnMapHandler = () => {};
+  const pickOnMapHandler = () => {
+    setUserLocation(null);
+
+    navigation.navigate("Map");
+  };
 
   return (
     <View>
