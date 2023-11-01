@@ -7,7 +7,13 @@ import { fetchPlaceDetails } from "../util/database";
 const PlaceDetails = ({ route, navigation }) => {
   const selectedPlaceId = route.params.placeId;
   const [placeData, setPlaceData] = useState();
-  const showOnMapHandler = () => {};
+
+  const showOnMapHandler = () => {
+    navigation.navigate("Map", {
+      initialLat: placeData.location.lat,
+      initialLng: placeData.location.lng
+    });
+  };
 
   useEffect(() => {
     const loadPlaceData = async () => {
