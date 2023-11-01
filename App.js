@@ -10,6 +10,7 @@ import { init } from "./util/database";
 import AllPaces from "./screen/AllPlaces";
 import AddPlaces from "./screen/AddPlaces";
 import Map from "./screen/Map";
+import PlaceDetails from "./screen/PlaceDetails";
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,7 @@ export default function App() {
           />
           <Stack.Screen name="AddPlace" component={AddPlaces} options={{ title: "Add a New Place" }} />
           <Stack.Screen name="Map" component={Map} options={{ title: "Select a Point on the Map" }} />
+          <Stack.Screen name="PlaceDetails" component={PlaceDetails} options={{ title: "Loading Place Details..." }} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
